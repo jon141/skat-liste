@@ -70,13 +70,13 @@ export async function create_new_group(group_name, members_id) {
     
 }
 
-async function get_playername_by_id(player_id) {
+export async function get_playername_by_id(player_id) {
     console.log("Getting playername for: " + player_id);
 
     const { data, error } = await supabase
         .from('player')
         .select('username')
-        .eq('id', player_id)
+        .eq('player_id', player_id)
         .single();
 
     if (error) {
@@ -86,7 +86,7 @@ async function get_playername_by_id(player_id) {
         console.log('Spielername erfolgreich abgerufen:', data.username)
         return data.username;
     }
-}
+}//
 
 async function get_groupname_by_id(group_id) {
     console.log("Getting groupname for: " + group_id);
@@ -145,26 +145,42 @@ export async function get_user_data_by_uuid() {
     return data
 }
 
-export async function get_groupnames_by_group_ids(group_ids) {
+export async function get_all_player_data() {
+    console.log("Getting all player names and ids...");
+    const { data, error } = await supabase
+        .from('player')
+        .select('player_id, username')
+
+    if (error) {
+        console.error('Fehler beim Abrufen der Spielernamen und IDs:', error)
+        return []
+    }
+
+    console.log('Spielernamen und IDs erfolgreich abgerufen:', data)
+    return data
+}
+//
+
+export async function get_groupnames_by_group_ids(user_group_ids) {
     let group_names = []
 
-        for (const group_id of user_group_ids) {
-            console.log(`Daten für Gruppe ${group_id}:`)
-            const { data: group_name, error } = await supabase
-                .from('groups')
-                .select('groupname')
-                .eq('group_id', group_id)
-                .single()
+    for (const group_id of user_group_ids) {
+        console.log(`Daten für Gruppe ${group_id}:`)
+        const { data: group_name, error } = await supabase
+            .from('groups')
+            .select('groupname')
+            .eq('group_id', group_id)
+            .single()
 
-            if (error) {
-                console.error(`Fehler beim Abrufen der Gruppe ${group_id}:`, error)
-            } else {
-                console.log(group_name.groupname)
-                group_names.push(group_name.groupname)
-            }
+        if (error) {
+            console.error(`Fehler beim Abrufen der Gruppe ${group_id}:`, error)
+        } else {
+            console.log(group_name.groupname)
+            group_names.push(group_name.groupname)
         }
-        console.log('User Group Names:', group_names)
-        return group_names
+    }
+    console.log('User Group Names:', group_names)
+    return group_names
 }
 
 
@@ -184,7 +200,7 @@ export async function get_users_group_ids(player_id) {
     return data.map(entry => entry.group_id);
 }
 
-
+// alle player_ids in einer Gruppe abrufen
 export async function get_groupmember_ids(group_id) {
     console.log("Getting groupmember ids for group: " + group_id);
     const { data, error } = await supabase
@@ -201,6 +217,48 @@ export async function get_groupmember_ids(group_id) {
         return member_ids;
     }
 }
+
+export async function create_new_game_entry(group_id, looser_ids, points, comment) {
+    console.log("Creating new game entry for group: " + group_id + " with points: " + points + " and loosers: " + looser_ids);
+
+    const { data, error } = await supabase
+        .from('game_entries')
+        .insert({
+            group_id: group_id,
+            comment: comment
+        })
+        .select()
+        .single();
+    
+    if (error) {
+        console.error('Fehler beim Erstellen des Spieleintrags:', error)
+        return;
+    } else {
+        console.log('Spieleintrag erfolgreich erstellt:', data)
+    }
+    if (error) throw error;
+    const game_entry_id = data.game_entry_id;
+
+    for (const player_id of looser_ids) {
+        const { data, error } = await supabase
+            .from('game_entry_players')
+            .insert({
+                game_entry_id: game_entry_id,
+                player_id: player_id,
+                points: points
+            })
+
+    if (error) {
+            console.error('Fehler beim hinzugügen zu groupmembers:', error)
+        } else {
+            console.log('Beziehung erfolgreich hinzugefügt:', data)
+        }
+
+        if (error) throw error;
+
+    
+}}
+
 
 function calculate_group_score(group_id) {
     console.log("Calculating score for group: " + group_id);

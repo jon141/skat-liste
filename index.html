@@ -7,15 +7,6 @@
 </head>
 <body>
 
-  <script type="module">
-    import { login_requirement_check, log_groups, create_new_group } from './db_operations.js'
-
-    await login_requirement_check()
-    await log_groups()
-    //await create_new_group('Testgruppe', [4, 5, 6])
-    //await log_groups()
-  </script>
-
   <h1>Die unendliche Skat Liste kommt!!!</h1>
   hier wird die Punkte Liste angezeigt werden
 
@@ -28,20 +19,29 @@
     </select> 
 
     
-    <div id="groupmember_selection">
+    <div>
       Verlierer: <br/>
-      <!-- Mitglieder Auswahl wird hier dynamisch eingefügt -->
+      <div id="groupmember_selection">
+
+              <!-- Mitglieder Auswahl wird hier dynamisch eingefügt -->
+
+      </div>
 
     </div>
+    <button id="add_entry_button">Eintrag hinzufügen</button>
   </div>
 
+  <div>
   <h2>Neue Gruppe</h2>
   Gruppenname: <input type="text" id="new_group_name" /> <br/>
   <div>
-    c1 <br>
-    c2 <br>
-    ...
-  </div>
+    Mitglieder hinzufügen: <br/>
+    <div id="groupmember_adds">
 
+    </div>
+  </div>
+  <button id="create_group_button">Gruppe erstellen</button>
+  </div>
+  <script type="module" src="main.js"> </script>
 </body>
 </html>

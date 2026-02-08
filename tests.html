@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="module"> 
+        import { supabase } from './supabase.js'
+
+        import { login_requirement_check, 
+            log_groups, 
+            create_new_group, 
+            get_user_data_by_uuid,
+            get_users_group_ids,
+            get_groupnames_by_group_ids,
+            get_all_player_data } from './db_operations.js'
+        
+        
+
+
+        await log_groups()
+
+        const user_data = await get_user_data_by_uuid()
+
+        console.log('User Id:', user_data.player_id)
+        console.log('User Name:', user_data.username)
+
+
+        console.log("wellcome", user_data.username)
+
+
+        let user_group_ids = await get_users_group_ids(user_data.player_id)
+
+        console.log('User Group Ids:', user_group_ids)
+
+        //Gruppennamen der Gruppen nach ID
+        console.log('User Group Names:', get_groupnames_by_group_ids(user_group_ids))
+
+        console.log('Alle Spieler:', await get_all_player_data())
+    
+    </script>
+
+</body>
+</html>

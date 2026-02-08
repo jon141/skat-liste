@@ -1,63 +1,132 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-const supabase = createClient(
-  'https://ogclflemutkutlhipdtl.supabase.co',
-  'sb_publishable_9Vwf7sx_EGE1D-bGKqa1Vg_6GKAYd-b'
-)
+import { supabase } from './supabase.js'
+import { login_requirement_check, 
+    log_groups, 
+    create_new_group, 
+    get_user_data_by_uuid,
+    get_users_group_ids,
+    get_groupnames_by_group_ids,
+    get_all_player_data,
+    get_groupmember_ids,
+    get_playername_by_id
+ } from './db_operations.js'
 
-async function create_new_group(group_name, members_id) {
-    console.log("Creating new group with name: " + group_name + " and members: " + members_id);
+//Login Prüüfen
+console.log('Checking login requirement...')
+await login_requirement_check()
+await log_groups()
+//await create_new_group('Testgruppe', [4, 5, 6])
+//await log_groups()
 
-    //Gruppeneintrag erstellen
-    const { data, error } = await supabase
-        .from('group')
-        .insert([
-            {
-                name: group_name,
-            }
-        ])
-        .select()
-        .single();
-    
-    if (error) {
-        console.error('Fehler beim hinzugügen zu groups:', error)
-    } else {
-        console.log('Gruppe erfolgreich hinzugefügt:', data)
-    }
-    
-    if (error) throw error;
 
-    // Id der erstellten Gruppe auslesen
-    const group_id = data.id;
 
-    // Einträge für groupmembers erstellen
-    for (const id of members_id) {
-        const { data, error } = await supabase
-            .from('user')
-            .insert({ id: id,
-                    group_id: group_id,
-                    player_id: id
-             })
+console.log('main.js')
+// Userdata auslesen (bleibt konstant)
+const user_data = await get_user_data_by_uuid();
 
-        if (error) {
-            console.error('Fehler beim hinzugügen zu groupmembers:', error)
-        } else {
-            console.log('Beziehung erfolgreich hinzugefügt:', data)
-        }
+async function update_group_select() {
+    const user_group_ids = await get_users_group_ids(user_data.player_id);
+    const user_group_names = await get_groupnames_by_group_ids(user_group_ids);
 
-        if (error) throw error;
+    console.log("User Group IDs:", user_group_ids);
+    console.log("User Group Names:", user_group_names);
+
+    // Füllt die Kombobox beim neuen Eintrag mit den gruppen in denen user mitglied ist
+    const group_select = document.getElementById("group_select");
+
+    for (let i = 0; i < user_group_ids.length; i++) {
+        const option = document.createElement("option");
+
+        option.value = user_group_ids[i];
+        option.textContent = user_group_names[i];
+        group_select.appendChild(option);
 
     }
-    
+
 }
 
-function get_group() {
-    console.log("Getting groups...");
+
+// die checkboxen mit den Spielernamen in der Gruppe füllen füllen
+async function update_looser_selection() {
+    console.log("Updating looser selection...");
+
+    const selected_group = document.getElementById("group_select").value;
+    const player_ids_in_group = await get_groupmember_ids(selected_group);
+
+    console.log("Selected group:", selected_group);
+    console.log("Player IDs:", player_ids_in_group);
+
+
+    const groupmember_selection_div = document.getElementById("groupmember_selection");
+    groupmember_selection_div.replaceChildren();
+
+    //const all_player_data = await get_all_player_data();
+
+    for (let i = 0; i < player_ids_in_group.length; i++) {
+
+        const player_id = player_ids_in_group[i];
+        const player_name = await get_playername_by_id(player_id);
+
+        console.log("Player ID:", player_id);
+        console.log("Player Name:", player_name);
+
+        
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+
+        checkbox.type = "checkbox";
+        checkbox.value = player_id;
+        checkbox.name = "losers";
+
+        label.appendChild(checkbox);
+        label.append(" " + player_name);
+
+        groupmember_selection_div.appendChild(label);
+        groupmember_selection_div.appendChild(document.createElement("br"));}
+
 }
 
-function calculate_group_score(group_id) {
-    console.log("Calculating score for group: " + group_id);
+
+
+async function update_add_member_selection() {
+    console.log("   Updating add member selection...");
+
+    const all_player_data = await get_all_player_data();
+
+    console.log("   All Player Data:", all_player_data);
+
+
+    const groupmember_adds_div = document.getElementById("groupmember_adds");
+    groupmember_adds_div.replaceChildren();
+
+    //const all_player_data = await get_all_player_data();
+
+    for (let i = 0; i < all_player_data.length; i++) {
+
+        const player_id = all_player_data[i].player_id;
+        const player_name = all_player_data[i].username;
+
+        console.log("   Player ID:", player_id);
+        console.log("   Player Name:", player_name);
+
+        
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+
+        checkbox.type = "checkbox";
+        checkbox.value = player_id;
+        checkbox.name = "losers";
+
+        label.appendChild(checkbox);
+        label.append(" " + player_name);
+
+        groupmember_adds_div.appendChild(label);
+        groupmember_adds_div.appendChild(document.createElement("br"));}
+
 }
 
-function add_game_entry(group_id, points, looser_ids) {
-}
+
+
+await update_group_select()//
+await update_looser_selection()
+await update_add_member_selection()
