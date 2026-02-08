@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skat Punkte Liste</title>
+</head>
+<body>
+
+  <script type="module">
+    import { login_requirement_check, log_groups, create_new_group } from './db_operations.js'
+
+    await login_requirement_check()
+    await log_groups()
+    //await create_new_group('Testgruppe', [4, 5, 6])
+    //await log_groups()
+  </script>
+
+  <h1>Die unendliche Skat Liste kommt!!!</h1>
+  hier wird die Punkte Liste angezeigt werden
+
+  <div>
+    <h2>neuer Eintrag</h2> <br>
+    Punkte: <input type="number" id="points_input" value="2" min="2"/><br/>
+    Gruppe: 
+    <select id="group_select">
+        
+    </select> 
+
+    
+    <div id="groupmember_selection">
+      Verlierer: <br/>
+      <!-- Mitglieder Auswahl wird hier dynamisch eingefügt -->
+
+    </div>
+  </div>
+
+  <h2>Neue Gruppe</h2>
+  Gruppenname: <input type="text" id="new_group_name" /> <br/>
+  <div>
+    c1 <br>
+    c2 <br>
+    ...
+  </div>
+
+</body>
+</html>
