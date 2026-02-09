@@ -91,9 +91,9 @@ async function get_groupname_by_id(group_id) {
     console.log("Getting groupname for: " + group_id);
 
     const { data, error } = await supabase
-        .from('group')
+        .from('groups')
         .select('groupname')
-        .eq('id', group_id)
+        .eq('group_id', group_id)
         .single();
 
     if (error) {
@@ -325,5 +325,92 @@ export async function get_profile_information(player_id) {
     const winningRate = playedGames > 0 ? ((wonGames / playedGames) * 100).toFixed(2) : '0.00';
     console.log(`Total Games: ${playedGames}, Lost Games: ${lostGames}, Won Games: ${wonGames}, Winning Rate: ${winningRate}%`);
     return {playedGames, lostGames, wonGames, winningRate};
+
+}
+
+export async function get_group_information(group_id) {
+    console.log("Getting group information for group: " + group_id);
+    
+    const group_name = await get_groupname_by_id(group_id);
+    const member_ids = await get_groupmember_ids(group_id);
+    console.log("   Group Name:", group_name);
+    console.log("   Member IDs:", member_ids);
+
+    const member_names = [];
+
+    const { count, error } = await supabase
+    .from('game_entries')
+    .select('*', { count: 'exact', head: true })
+    .eq('group_id', group_id);
+
+    if (error) {
+    console.error('Fehler beim Zählen der Spiele:', error);
+    return;
+    }
+
+    const total_games = count ?? 0;
+    console.log('Total Games in Group:', total_games);
+
+
+    let player_lost_games = {};
+    for (const member_id of member_ids) {
+        const { count, error } = await supabase
+        .from('game_scores')
+        .select(
+            'points, game_entries!inner(group_id)',
+            { count: 'exact', head: true }
+        )
+        .eq('player_id', member_id)
+        .eq('game_entries.group_id', group_id);
+
+        if (error) {
+        console.error(error);
+        } else {
+        console.log('Anzahl Spiele:', count);
+        player_lost_games[member_id] = count;
+        }
+
+    }
+
+    console.log("   Player Lost Games in Group:", player_lost_games);
+
+
+    let player_points = {};
+    
+    // Punkte für jedes Mitglied der Gruppe berechnen
+    for (const member_id of member_ids) {
+        // 1️⃣ alle game_entry_ids der Gruppe
+        const { data: gameEntries, error: geError } = await supabase
+            .from('game_entries')
+            .select('game_entry_id')
+            .eq('group_id', group_id);
+
+        if (geError) console.error(geError);
+
+        const gameEntryIds = gameEntries.map(e => e.game_entry_id);
+
+        // 2️⃣ Punkte des Spielers summieren
+        const { data: scores, error: scoreError } = await supabase
+            .from('game_scores')
+            .select('points')
+            .eq('player_id', member_id)
+            .in('game_entry_id', gameEntryIds);
+
+        if (scoreError) console.error(scoreError);
+
+        const totalPoints = scores.reduce((sum, e) => sum + e.points, 0);
+        console.log("Total points:", totalPoints);
+        player_points[member_id] = totalPoints;
+            }
+    
+    console.log("   Player Points:", player_points);
+
+    return {
+        group_name,
+        member_ids,
+        total_games,
+        player_lost_games,
+        player_points
+    };
 
 }

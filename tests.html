@@ -16,7 +16,8 @@
             get_users_group_ids,
             get_groupnames_by_group_ids,
             get_all_player_data,
-            get_profile_information
+            get_profile_information,
+            get_group_information
         } from './db_operations.js'
         
         
@@ -25,6 +26,14 @@
         const user_data = await get_user_data_by_uuid()
 
         console.log(await get_profile_information(user_data.player_id))
+        const group_ids = await get_users_group_ids(user_data.player_id)
+        console.log(group_ids)
+
+        const info = await get_group_information(group_ids[0])
+        console.log(info)
+
+
+
     </script>
 
 </body>

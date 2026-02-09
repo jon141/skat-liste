@@ -70,3 +70,106 @@ h1 {
     text-decoration: underline;
     margin-bottom: 15px;
 }
+
+
+.group-card {
+    background: #fff;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.group-card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.group-card ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.group-card li {
+    margin: 6px 0;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.value {
+    margin-left: 4px;
+}
+
+.value-accent { color: #2980b9; }
+.value-blue   { color: #3498db; }
+.value-green  { color: #27ae60; }
+.value-red    { color: #e74c3c; }
+.value-purple { color: #8e44ad; }
+
+
+/* ===== Gruppen-Card ===== */
+.group-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border-left: 6px solid #3498db; /* optische Trennung */
+}
+
+/* ===== Gruppenname ===== */
+.group-title {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #2c3e50;
+}
+
+/* ===== Abschnittsüberschriften ===== */
+.section-title {
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.points-title {
+    color: #2980b9;
+}
+
+.balance-title {
+    color: #8e44ad;
+}
+
+/* ===== Listen ===== */
+.group-card ul {
+    margin: 4px 0 10px 20px;
+    padding-left: 16px;
+}
+
+.group-card li {
+    margin: 4px 0;
+}
+
+/* ===== Wertefarben ===== */
+.value-accent { color: #2980b9; }
+.value-blue   { color: #3498db; }
+.value-green  { color: #27ae60; }
+.value-red    { color: #e74c3c; }
+.value-purple { color: #8e44ad; }
+
+/* ===== Mobile ===== */
+@media (max-width: 600px) {
+    .group-card {
+        padding: 14px 16px;
+    }
+
+    .group-title {
+        font-size: 1.2rem;
+    }
+}
+
+.information_under_header {
+    color: #15832d;
+    font-size: 1.1rem;  }
