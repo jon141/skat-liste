@@ -15,31 +15,16 @@
             get_user_data_by_uuid,
             get_users_group_ids,
             get_groupnames_by_group_ids,
-            get_all_player_data } from './db_operations.js'
+            get_all_player_data,
+            get_profile_information
+        } from './db_operations.js'
         
         
 
-
-        await log_groups()
 
         const user_data = await get_user_data_by_uuid()
 
-        console.log('User Id:', user_data.player_id)
-        console.log('User Name:', user_data.username)
-
-
-        console.log("wellcome", user_data.username)
-
-
-        let user_group_ids = await get_users_group_ids(user_data.player_id)
-
-        console.log('User Group Ids:', user_group_ids)
-
-        //Gruppennamen der Gruppen nach ID
-        console.log('User Group Names:', get_groupnames_by_group_ids(user_group_ids))
-
-        console.log('Alle Spieler:', await get_all_player_data())
-    
+        console.log(await get_profile_information(user_data.player_id))
     </script>
 
 </body>

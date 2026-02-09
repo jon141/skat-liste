@@ -1,62 +1,48 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Skat Login</title>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" href="login_style.css">
 </head>
 <body>
+
+<div class="login-card">
   <h1>Login</h1>
 
   <input id="username" placeholder="Benutzername" />
   <input id="password" type="password" placeholder="Passwort" />
+
   <button id="login">Login</button>
 
   <pre id="output">Bitte einloggen...</pre>
+</div>
 
-  <!-- Supabase JS über CDN laden -->
-  <script type="module">
-    import { supabase } from './supabase.js'
+<script type="module">
+import { supabase } from './supabase.js'
 
-    const loginButton = document.getElementById('login')
-    const output = document.getElementById('output')
+const loginButton = document.getElementById('login')
+const output = document.getElementById('output')
 
-    loginButton.addEventListener('click', async () => {
-      const username = document.getElementById('username').value
-      const password = document.getElementById('password').value
-      const email = `${username}@skat.local`  // Fake-Email für Supabase Auth
+loginButton.addEventListener('click', async () => {
+  const username = document.getElementById('username').value
+  const password = document.getElementById('password').value
+  const email = `${username}@skat.local`
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      })
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  })
 
-      if (error) {
-        output.textContent = 'Fehler: ' + error.message
-        console.error(error)
-      } else {
-        output.textContent = `Eingeloggt!\nUser-ID: ${data.user.id}`
-        console.log('User-Daten:', data.user)
+  if (error) {
+    output.textContent = 'Fehler: ' + error.message
+    console.error(error)
+  } else {
+    output.textContent = `Eingeloggt!\nUser-ID: ${data.user.id}`
+    window.location.href = 'index.html';      
+  }
+})
+</script>
 
-        const userId = data.user.id
-        console.log('user.id:', userId)
-        
-        const { data: playerData, error: playerError } = await supabase
-            .from('player')
-            .select('*')
-            //.eq('auth_id', userId)
-            //.single() // gibt direkt ein Objekt zurück, statt Array
-
-        if (playerError) {
-            console.error('Fehler beim Abrufen:', playerError)
-        } else {
-            console.log('Player-Eintrag:', playerData)
-        }
-        
-        
-
-        window.location.href = 'index.html';      
-        }
-    })
-  </script>
 </body>
 </html>

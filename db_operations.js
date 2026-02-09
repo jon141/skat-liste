@@ -40,12 +40,11 @@ export async function create_new_group(group_name, members_id) {
     
     if (error) {
         console.error('Fehler beim hinzugügen zu groups:', error)
+        return false;
     } else {
         console.log('Gruppe erfolgreich hinzugefügt:', data)
     }
     
-    if (error) throw error;
-
     // Id der erstellten Gruppe auslesen
     const group_id = data.group_id;
 
@@ -59,15 +58,15 @@ export async function create_new_group(group_name, members_id) {
              })
 
         if (error) {
-            console.error('Fehler beim hinzugügen zu groupmembers:', error)
+            console.error('Fehler beim hinzugügen zu groupmembers: da', error)
+            return false;
         } else {
             console.log('Beziehung erfolgreich hinzugefügt:', data)
         }
 
-        if (error) throw error;
 
     }
-    
+    return true;
 }
 
 export async function get_playername_by_id(player_id) {
@@ -241,7 +240,7 @@ export async function create_new_game_entry(group_id, looser_ids, points, commen
 
     for (const player_id of looser_ids) {
         const { data, error } = await supabase
-            .from('game_entry_players')
+            .from('game_scores')
             .insert({
                 game_entry_id: game_entry_id,
                 player_id: player_id,
@@ -249,13 +248,13 @@ export async function create_new_game_entry(group_id, looser_ids, points, commen
             })
 
     if (error) {
-            console.error('Fehler beim hinzugügen zu groupmembers:', error)
+            console.error('Fehler beim hinzugügen hier:', error)
         } else {
             console.log('Beziehung erfolgreich hinzugefügt:', data)
         }
 
         if (error) throw error;
-
+//
     
 }}
 
@@ -264,5 +263,67 @@ function calculate_group_score(group_id) {
     console.log("Calculating score for group: " + group_id);
 }
 
-function add_game_entry(group_id, points, looser_ids) {
+export async function get_total_gamenumber_of_player(player_id) {
+  try {
+    // 
+    const { data: groupData, error: groupError } = await supabase
+      .from('groupmembers')
+      .select('group_id, groups(groupname)')
+      .eq('player_id', player_id);
+
+    if (groupError) throw groupError;
+
+    const groupIds = groupData.map(g => g.group_id);
+    const groupNames = groupData.map(g => g.groups.groupname);
+
+    // 2️⃣ Anzahl Spiele zählen, die in diesen Gruppen gespielt wurden
+    let gameCount = 0;
+    if (groupIds.length > 0) {
+      const { count, error: gameError } = await supabase
+        .from('game_entries')
+        .select('game_entry_id', { count: 'exact', head: true })
+        .in('group_id', groupIds);
+
+      if (gameError) throw gameError;
+      gameCount = count;
+    }
+
+    return gameCount
+
+      //player_id,
+      //groups: groupNames,
+   
+
+  } catch (err) {
+    console.error("Fehler beim Abrufen der Profilinformationen:", err);
+    return null;
+  }
+}
+
+export async function get_lost_games_of_player(player_id) {
+
+    try {
+        // Alle Einträge in game_scores abrufen, die zum Spieler gehören
+        const { count, error } = await supabase
+        .from('game_scores')
+        .select('game_entry_id', { count: 'exact', head: true })
+        .eq('player_id', player_id);
+
+        if (error) throw error;
+
+        return count; // Anzahl Spiele, bei denen der Spieler Punkte hatte (hier als "verlorene Spiele" interpretierbar)
+    } catch (err) {
+        console.error('Fehler beim Abrufen der verlorenen Spiele:', err);
+        return 0;
+    }
+}
+
+export async function get_profile_information(player_id) {
+    const playedGames = await get_total_gamenumber_of_player(player_id);
+    const lostGames = await get_lost_games_of_player(player_id);
+    const wonGames = playedGames - lostGames;
+    const winningRate = playedGames > 0 ? ((wonGames / playedGames) * 100).toFixed(2) : '0.00';
+    console.log(`Total Games: ${playedGames}, Lost Games: ${lostGames}, Won Games: ${wonGames}, Winning Rate: ${winningRate}%`);
+    return {playedGames, lostGames, wonGames, winningRate};
+
 }

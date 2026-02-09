@@ -4,36 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skat Punkte Liste</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>Die unendliche Skat Liste kommt!!!</h1>
-  hier wird die Punkte Liste angezeigt werden
+  <h1 id="welcome_heading">Hallo du Lappen! </h1>
 
   <div>
-    <h2>neuer Eintrag</h2> <br>
-    Punkte: <input type="number" id="points_input" value="2" min="2"/><br/>
-    Gruppe: 
+    <h2>Neuer Eintrag</h2> 
+        Gruppe: 
     <select id="group_select">
         
     </select> 
 
+    Punkte: <input type="number" id="points_input" value="2" min="2"/><br/>
+
+
     
     <div>
       Verlierer: <br/>
-      <div id="groupmember_selection">
+      <div id="looser_selection">
 
               <!-- Mitglieder Auswahl wird hier dynamisch eingefügt -->
 
       </div>
 
     </div>
+
+    kommentar: <input type="text" placeholder="Spiel: Grand mit 3 | super Runde" id="new_entry_comment_input" /> <br/>
+
     <button id="add_entry_button">Eintrag hinzufügen</button>
   </div>
-
+  <br>
   <div>
   <h2>Neue Gruppe</h2>
-  Gruppenname: <input type="text" id="new_group_name" /> <br/>
+  Gruppenname: <input type="text" placeholder="Z.b. Matherunde" id="new_group_name" /> <br/>
   <div>
     Mitglieder hinzufügen: <br/>
     <div id="groupmember_adds">
