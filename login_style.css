@@ -1,111 +1,97 @@
-  /* Body & Hintergrund */
-  body {
+/* Allgemein */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
     margin: 0;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    color: #1e272e;
-  }
+    min-height: 100vh;
+}
 
-/* Login-Container */
+/* Login-Card */
 .login-card {
-    background: #ffffff;
-    padding: 40px 35px;
-    border-radius: 16px;
-    width: 360px; /* Standardbreite für Desktop */
-    max-width: 90%; /* Auf kleinen Bildschirmen nie größer als 90% der Breite */
-    box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+    background-color: #ffffff;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-
-  .login-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 18px 35px rgba(0,0,0,0.12);
-  }
-
-  /* Überschrift */
-  .login-card h1 {
-    margin-bottom: 30px;
-    font-weight: 700;
-    font-size: 2rem;
-    color: #273c75;
+/* Überschrift */
+.login-card h1 {
     text-align: center;
-  }
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
 
-  /* Inputs */
-  .login-card input[type="text"],
-  .login-card input[type="password"] {
+/* Inputs */
+.login-card input[type="text"],
+.login-card input[type="password"] {
     width: 100%;
     padding: 12px 16px;
-    margin-bottom: 20px;
-    border-radius: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
     border: 1px solid #d1d8e0;
     font-size: 1rem;
     box-sizing: border-box;
     transition: border 0.2s, box-shadow 0.2s;
-  }
+}
 
-  .login-card input:focus {
+.login-card input:focus {
     outline: none;
-    border-color: #00a8ff;
-    box-shadow: 0 0 8px rgba(0,168,255,0.3);
-  }
+    border-color: #2980b9;
+    box-shadow: 0 0 8px rgba(41,128,185,0.3);
+}
 
-  /* Button */
-  .login-card button {
-    padding: 14px;
+/* Button */
+.login-card button {
+    padding: 12px;
     border: none;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #00a8ff 0%, #0097e6 100%);
+    border-radius: 10px;
+    background-color: #2980b9;
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.2s;
-    margin-bottom: 20px;
-  }
+    margin-top: 10px;
+}
 
-  .login-card button:hover {
+.login-card button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-  }
+}
 
-  .login-card button:active {
+.login-card button:active {
     transform: translateY(0);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
+}
 
-  /* Output / Feedback */
-  pre#output {
+/* Output / Feedback */
+pre#output {
     background: #f1f2f6;
     padding: 12px;
     border-radius: 10px;
-    font-size: 0.9rem;
-    color: #e84118;
+    font-size: 0.95rem;
+    color: #e74c3c;
     white-space: pre-wrap;
     max-height: 120px;
     overflow-y: auto;
     margin: 0;
-  }
-  #username {
-    background: #fff;
-    border-radius: 10px;
-    border: 1px solid #00a8ff;
-    padding: 12px;
-    margin-bottom: 5px;
-    font-size: 1rem;
 }
 
-@media (max-width: 400px) {
+/* Responsive für kleine Bildschirme */
+@media (max-width: 450px) {
     .login-card {
-        padding: 25px 20px;
+        padding: 20px 15px;
     }
 
     .login-card h1 {
@@ -119,7 +105,7 @@
     }
 
     .login-card button {
-        padding: 12px;
+        padding: 10px;
         font-size: 1rem;
     }
 }
