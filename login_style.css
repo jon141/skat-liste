@@ -10,18 +10,20 @@
     color: #1e272e;
   }
 
-  /* Login-Container */
-  .login-card {
+/* Login-Container */
+.login-card {
     background: #ffffff;
     padding: 40px 35px;
     border-radius: 16px;
-    width: 360px;
+    width: 360px; /* Standardbreite für Desktop */
+    max-width: 90%; /* Auf kleinen Bildschirmen nie größer als 90% der Breite */
     box-shadow: 0 12px 25px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     align-items: stretch;
     transition: transform 0.2s, box-shadow 0.2s;
-  }
+}
+
 
   .login-card:hover {
     transform: translateY(-3px);
@@ -99,4 +101,25 @@
     padding: 12px;
     margin-bottom: 5px;
     font-size: 1rem;
+}
+
+@media (max-width: 400px) {
+    .login-card {
+        padding: 25px 20px;
+    }
+
+    .login-card h1 {
+        font-size: 1.5rem;
+    }
+
+    .login-card input[type="text"],
+    .login-card input[type="password"] {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+
+    .login-card button {
+        padding: 12px;
+        font-size: 1rem;
+    }
 }
