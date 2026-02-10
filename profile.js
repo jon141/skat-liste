@@ -1,6 +1,10 @@
 
 import { supabase } from './supabase.js'
 
+import { login_requirement_check } from './db_operations.js'
+
+await login_requirement_check()
+
 const new_password_input = document.getElementById("new_password_input");
 const change_password_button = document.getElementById("change_password_button");
 const change_password_output = document.getElementById("change_password_output");
