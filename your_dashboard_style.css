@@ -35,7 +35,7 @@ h1 {
 }
 
 /* Gruppenbereich */
-#your_groups_dashboard {
+.group_container {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 12px;
@@ -44,17 +44,18 @@ h1 {
     margin: 0 auto;
     font-size: 1.1rem;
     color: #34495e;
+    margin-bottom:  20px; ;
 }
 
 /* Optional: Hover-Effekt für Gruppen */
-#your_groups_dashboard:hover {
+.group_container:hover {
     box-shadow: 0 6px 16px rgba(0,0,0,0.15);
     transition: all 0.2s ease-in-out;
 }
 
 /* Kleine Responsive Anpassung */
 @media (max-width: 600px) {
-    #profile_info, #your_groups_dashboard {
+    #profile_info, .group_container {
         width: 90%;
         padding: 15px;
     }
@@ -173,3 +174,21 @@ h1 {
 .information_under_header {
     color: #15832d;
     font-size: 1.1rem;  }
+
+
+select {
+  padding: 8px 12px;
+  margin: 6px 0 12px 0;
+  border-radius: 6px;
+  border: 1px solid #dcdde1;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+select:focus {
+  outline: none;
+  border-color: #00a8ff;
+  box-shadow: 0 0 5px rgba(0,168,255,0.5);
+}
