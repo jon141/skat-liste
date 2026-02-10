@@ -102,7 +102,7 @@ async function update_group_dashboard() {
         for (const member_id of member_ids) {
             const player_name = await get_playername_by_id(member_id);
 
-            const won_games = player_points[member_id] - player_lost_games[member_id];
+            const won_games = total_games - player_lost_games[member_id];
             const winrate =
                 total_games > 0
                     ? (won_games / total_games * 100).toFixed(2)

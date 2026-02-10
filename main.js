@@ -34,6 +34,7 @@ async function update_group_select() {
 
     // Füllt die Kombobox beim neuen Eintrag mit den gruppen in denen user mitglied ist
     const group_select = document.getElementById("group_select");
+    group_select.replaceChildren();
 
     for (let i = 0; i < user_group_ids.length; i++) {
         const option = document.createElement("option");
@@ -144,8 +145,15 @@ async function load_entry_data_and_create() {
     console.log("       Points:", points);
     console.log("       Comment:", comment);
 
+
     if (selected_losers.length === 1 || selected_losers.length === 2) {
-        create_new_game_entry(selected_group, selected_losers, points, comment);
+        create_new_game_entry(selected_group, selected_losers, points, comment);    
+        comment.innerHTML = ""
+        const add_success_div = document.getElementById("add_success");
+        add_success_div.textContent = "Eintrag erfolgreich hinzugefügt!";
+        setTimeout(() => {
+            add_success_div.textContent = "";
+        }, 3000);
     } else {
         alert("You must select either 1 or 2 losers.");
     }
