@@ -147,8 +147,9 @@ async function load_entry_data_and_create() {
 
 
     if (selected_losers.length === 1 || selected_losers.length === 2) {
-        create_new_game_entry(selected_group, selected_losers, points, comment);    
+        await create_new_game_entry(selected_group, selected_losers, points, comment);    
         comment.innerHTML = ""
+        
         const add_success_div = document.getElementById("add_success");
         add_success_div.textContent = "Eintrag erfolgreich hinzugefügt!";
         setTimeout(() => {
