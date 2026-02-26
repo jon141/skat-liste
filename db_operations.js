@@ -449,3 +449,23 @@ export async function get_looser_and_scores_by_game_entry_id(game_entry_id) {
 
     return data;
 }
+
+export async function del_game_entry(game_entry_id) {
+    const { error } = await supabase
+        .from('game_entries')
+        .delete()
+        .eq('game_entry_id', game_entry_id);
+
+
+    const { error: error2 } = await supabase
+        .from('game_scores')
+        .delete()
+        .eq('game_entry_id', game_entry_id);
+
+    if (error2) {
+        console.error(error2);
+        throw error2;
+    }
+        console.error(error);
+        throw error;
+}

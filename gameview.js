@@ -5,7 +5,8 @@ import { login_requirement_check,
          get_all_game_entries,
          get_looser_and_scores_by_game_entry_id,
          get_playername_by_id,
-         get_groupname_by_id
+         get_groupname_by_id,
+         del_game_entry
  } from './db_operations.js'
 
 //Login Prüüfen
@@ -45,6 +46,7 @@ for (const element of all_games) {
 
     let game_info_div = document.createElement("div");
     game_info_div.className = "game-info";
+    game_info_div.id = `game_${game_id}`;
 
     const game_title = document.createElement("h3");
     game_title.id = "game_title";
@@ -72,10 +74,25 @@ for (const element of all_games) {
     //const game_loosers_p = document.createElement("p");
     //game_loosers_p.textContent = `Verlierer IDs: ${game_loosers.join(", ")}`;
 
+
+    const del_entry_button = document.createElement("button");
+    del_entry_button.textContent = "Eintrag löschen";
+    del_entry_button.className = "delete-entry-button";
+    del_entry_button.onclick = async () => {
+        if (confirm("Sicher??? Die Aktion ist unwiderruflich!!!")) {
+            //del_game_entry(game_id);
+            document.getElementById(`game_${game_id}`).remove();
+        }
+    };
+
+
     game_info_div.appendChild(game_title);
     game_info_div.appendChild(game_score_p);
     game_info_div.appendChild(looser_heading);
     game_info_div.appendChild(game_loosers_list);
+    game_info_div.appendChild(del_entry_button);
+
+
 
     games_container.appendChild(game_info_div);
 }
