@@ -469,3 +469,29 @@ export async function del_game_entry(game_entry_id) {
         console.error(error);
         throw error;
 }
+
+export async function is_user_admin() {
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) {
+        console.error('Kein eingeloggter User')
+    }
+    const uuid = user.id
+  // Prüfen, ob user_id in der admin-Tabelle existiert
+    const { data, error } = await supabase
+        .from('admins')
+        .select('auth_id')
+        .eq('auth_id', uuid)
+        .single()  // gibt direkt ein Objekt zurück, wenn vorhanden
+
+    if (error) {
+        if (error.code === 'PGRST116') {
+        // Kein Eintrag gefunden
+        return false
+        }
+        console.error('Fehler beim Prüfen Admin:', error)
+        return false
+    }
+
+    return !!data  // true, wenn Daten gefunden, sonst false
+}

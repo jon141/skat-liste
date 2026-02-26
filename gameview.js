@@ -6,7 +6,8 @@ import { login_requirement_check,
          get_looser_and_scores_by_game_entry_id,
          get_playername_by_id,
          get_groupname_by_id,
-         del_game_entry
+         del_game_entry,
+         is_user_admin
  } from './db_operations.js'
 
 //Login Prüüfen
@@ -90,8 +91,10 @@ for (const element of all_games) {
     game_info_div.appendChild(game_score_p);
     game_info_div.appendChild(looser_heading);
     game_info_div.appendChild(game_loosers_list);
-    game_info_div.appendChild(del_entry_button);
 
+    if (await is_user_admin()) {
+        game_info_div.appendChild(del_entry_button);
+    }
 
 
     games_container.appendChild(game_info_div);

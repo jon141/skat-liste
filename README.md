@@ -1,5 +1,6 @@
 Last Commits and Fixes (26.02.26):
-- es gibt jetzt die Spielliste, mit allen Spielen die von irgendwem gespielt wurden, aber keine Filter, nix bearbeitbar
+- es gibt jetzt die Spielliste, mit allen Spielen die von irgendwem gespielt wurden, aber keine Filter
+- Einträge auch löschbar
 
 
 (10.02.2026) :
