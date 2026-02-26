@@ -451,23 +451,29 @@ export async function get_looser_and_scores_by_game_entry_id(game_entry_id) {
 }
 
 export async function del_game_entry(game_entry_id) {
-    const { error } = await supabase
-        .from('game_entries')
-        .delete()
-        .eq('game_entry_id', game_entry_id);
-
-
-    const { error: error2 } = await supabase
+    // Zuerst alle Scores für diesen Eintrag löschen
+    const { error: scoresError } = await supabase
         .from('game_scores')
         .delete()
         .eq('game_entry_id', game_entry_id);
 
-    if (error2) {
-        console.error(error2);
-        throw error2;
+    if (scoresError) {
+        console.error('Fehler beim Löschen der Scores:', scoresError);
+        throw scoresError;
     }
-        console.error(error);
-        throw error;
+
+    // Jetzt den Game Entry löschen
+    const { error: entryError } = await supabase
+        .from('game_entries')
+        .delete()
+        .eq('game_entry_id', game_entry_id);
+
+    if (entryError) {
+        console.error('Fehler beim Löschen des Game Entry:', entryError);
+        throw entryError;
+    }
+
+    console.log('Game Entry und zugehörige Scores erfolgreich gelöscht');
 }
 
 export async function is_user_admin() {
