@@ -17,7 +17,10 @@
             get_groupnames_by_group_ids,
             get_all_player_data,
             get_profile_information,
-            get_group_information
+            get_group_information,
+            get_all_game_entries,
+            get_looser_and_scores_by_game_entry_id,
+            get_playername_by_id
         } from './db_operations.js'
         
         
@@ -31,7 +34,27 @@
 
         const info = await get_group_information(group_ids[0])
         console.log(info)
+        
 
+        console.log('-----------------')
+        const all_games = await get_all_game_entries()
+        console.log(all_games)
+        console.log(typeof all_games)
+
+        for (const element of all_games) {
+
+            const game_id = element.game_entry_id
+
+            const looser_and_scores = await get_looser_and_scores_by_game_entry_id(game_id)
+            
+            let game_loosers = []
+            const game_score = looser_and_scores[0].points
+
+            looser_and_scores.forEach(entry => {
+                //console.log(entry.player_id, get_playername_by_id(entry.player_id), entry.points)
+                game_loosers.push(entry.player_id)
+            })
+        }
 
 
     </script>

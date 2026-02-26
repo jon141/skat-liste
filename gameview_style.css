@@ -1,0 +1,83 @@
+/* gameview_style.css */
+
+/* Body & allgemeines Layout */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1f2937;
+}
+
+/* Container für alle Spiele */
+#games_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Einzelne Spiel-Box */
+.game-info {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.game-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+/* Spielüberschrift */
+#game_title {
+    margin: 0 0 10px 0;
+    font-size: 1.3rem;
+    color: #111827;
+}
+
+/* Kommentar */
+.game-info p {
+    margin: 5px 0 10px 0;
+    font-size: 1rem;
+    color: #374151;
+}
+
+/* Verliererüberschrift */
+.game-info h4 {
+    margin: 10px 0 5px 0;
+    font-size: 1.05rem;
+    color: #ef4444; /* rot für Verlierer */
+}
+
+/* Verlierer-Liste */
+.game-loosers-list {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.game-loosers-list li {
+    margin-bottom: 4px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+/* Responsive für kleine Bildschirme */
+@media (max-width: 600px) {
+    .game-info {
+        padding: 15px;
+    }
+    #game_title {
+        font-size: 1.1rem;
+    }
+}

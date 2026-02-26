@@ -87,7 +87,7 @@ export async function get_playername_by_id(player_id) {
     }
 }//
 
-async function get_groupname_by_id(group_id) {
+export async function get_groupname_by_id(group_id) {
     console.log("Getting groupname for: " + group_id);
 
     const { data, error } = await supabase
@@ -413,4 +413,39 @@ export async function get_group_information(group_id) {
         player_points
     };
 
+}
+
+
+export async function get_all_game_entries() {
+    console.log("Getting all game entries...");
+    const { data, error } = await supabase
+    .from('game_entries')
+    .select(`
+        game_entry_id,
+        created_at,
+        comment,
+        group_id,
+        groups (
+        groupname
+        )
+    `)
+    .order('created_at', { ascending: false });
+
+    if (error) console.error(error);
+    else console.log(data);
+    return data;
+}
+
+export async function get_looser_and_scores_by_game_entry_id(game_entry_id) {
+    const { data, error } = await supabase
+        .from('game_scores')
+        .select('player_id, points')
+        .eq('game_entry_id', game_entry_id);
+
+    if (error) {
+        console.error(error);
+        throw error;
+    }
+
+    return data;
 }
