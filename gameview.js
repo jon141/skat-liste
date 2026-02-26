@@ -81,7 +81,7 @@ for (const element of all_games) {
     del_entry_button.className = "delete-entry-button";
     del_entry_button.onclick = async () => {
         if (confirm("Sicher??? Die Aktion ist unwiderruflich!!!")) {
-            //del_game_entry(game_id);
+            del_game_entry(game_id);
             document.getElementById(`game_${game_id}`).remove();
         }
     };
