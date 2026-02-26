@@ -136,29 +136,41 @@ async function load_entry_data_and_create() {
     console.log("Loading entry data and creating...");
 
     const selected_group = document.getElementById("group_select").value;
-    const selected_losers = Array.from(document.querySelectorAll('input[name="losers"]:checked')).map(cb => cb.value);
-    const points = document.getElementById("points_input").value;
-    const comment = document.getElementById("new_entry_comment_input").value;
+    const selected_losers = Array.from(
+        document.querySelectorAll('input[name="losers"]:checked')
+    ).map(cb => cb.value);
 
-    console.log("       Selected group:", selected_group);
-    console.log("       Selected losers:", selected_losers);
-    console.log("       Points:", points);
-    console.log("       Comment:", comment);
+    const points_input = document.getElementById("points_input");
+    const points = parseInt(points_input.value, 10);
 
+    const comment_input = document.getElementById("new_entry_comment_input");
+    const comment = comment_input.value;
+
+    console.log("Selected group:", selected_group);
+    console.log("Selected losers:", selected_losers);
+    console.log("Points:", points);
+    console.log("Comment:", comment);
 
     if (selected_losers.length === 1 || selected_losers.length === 2) {
-        await create_new_game_entry(selected_group, selected_losers, points, comment);    
-        comment.innerHTML = ""
-        
-        const add_success_div = document.getElementById("add_success");
-        add_success_div.textContent = "Eintrag erfolgreich hinzugefügt!";
-        setTimeout(() => {
-            add_success_div.textContent = "";
-        }, 3000);
+        try {
+            await create_new_game_entry(selected_group, selected_losers, points, comment);
+
+            // Input-Felder leeren
+            comment_input.value = "";
+            points_input.value = 2; // optional: Reset auf Standardwert
+
+            // Erfolgsnachricht anzeigen
+            const add_success_div = document.getElementById("add_success");
+add_success_div.innerHTML = "<span style='color: green; display: block; margin-top: 10px;'>Eintrag erfolgreich hinzugefügt!</span>";            setTimeout(() => {
+                add_success_div.textContent = "";
+            }, 3000);
+        } catch (error) {
+            console.error("Fehler beim Erstellen des Eintrags:", error);
+            alert("Fehler beim Erstellen des Eintrags. Siehe Konsole.");
+        }
     } else {
         alert("You must select either 1 or 2 losers.");
     }
-
 }
 
 async function load_new_group_data_and_create() {
